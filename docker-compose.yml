@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  rc:
+    image: routine-checklist
+    ports:
+      - "8081:8080"
+    depends_on:
+      - rc_pg
+  rc_pg:
+    image: postgres
+    environment:
+      POSTGRES_USER: routinechecklist
+      POSTGRES_PASSWORD: $RC_PG_PASSWORD
+      POSTGRES_DB: rc
