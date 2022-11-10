@@ -3,12 +3,16 @@ services:
   rc:
     image: routine-checklist
     build: ./
+    environment:
+      DB_PASSWORD: $RC_PG_PASSWORD
     ports:
       - "8081:8080"
     depends_on:
       - rc_pg
   rc_pg:
     image: postgres
+    volumes:
+      - .docker-files/postgres/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     environment:
       POSTGRES_USER: routinechecklist
       POSTGRES_PASSWORD: $RC_PG_PASSWORD
