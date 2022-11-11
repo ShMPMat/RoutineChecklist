@@ -23,8 +23,8 @@
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
-    <ResourceLink name="jdbc/rc_pg"
-                  global="jdbc/rc_pg"
+    <ResourceLink name="jdbc/rc-pg"
+                  global="jdbc/rc-pg"
                   auth="Container"
                   type="javax.sql.DataSource" />
 

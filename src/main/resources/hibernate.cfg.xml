@@ -6,7 +6,7 @@
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
-        <property name="connection.datasource">java:comp/env/jdbc/rc_pg</property>
+        <property name="connection.datasource">java:comp/env/jdbc/rc-pg</property>
 
         <!--TODO for debug; remove eventually-->
         <property name="show_sql">true</property>

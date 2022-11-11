@@ -8,8 +8,8 @@ services:
     ports:
       - "8081:8080"
     depends_on:
-      - rc_pg
-  rc_pg:
+      - rc-pg
+  rc-pg:
     image: postgres
     volumes:
       - .docker-files/postgres/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
