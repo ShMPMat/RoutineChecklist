@@ -19,12 +19,16 @@ public class TaskController {
     }
 
     @GetMapping(value="/{id}")
-    public Task getTask(@PathVariable long id) {
-        return taskService.getTask(id);
+    public ResponseEntity<Task> getTask(@PathVariable long id) {
+        Task task = taskService.getTask(id);
+
+        return ResponseEntity.ok(task);
     }
 
     @PostMapping(value="/")
     public ResponseEntity<Task> getTask(@RequestBody String name) {
-        return ResponseEntity.ok(taskService.saveTask(name));
+        Task newTask = taskService.saveTask(name);
+
+        return ResponseEntity.ok(newTask);
     }
 }
