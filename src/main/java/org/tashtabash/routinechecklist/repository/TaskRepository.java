@@ -25,9 +25,11 @@ public class TaskRepository {
 
     //TODO search
 
-    public long saveTask(Task task) {
+    public Task saveTask(Task task) {
         try (Session session = sessionFactory.openSession()) {
-            return (long) session.save(task);
+            session.save(task);
+
+            return task;
         }
     }
 

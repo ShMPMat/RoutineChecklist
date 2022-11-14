@@ -23,8 +23,6 @@ public class TaskService {
     public Task saveTask(String name) {
         Task task = new Task(name);
 
-        long id = taskRepository.saveTask(task);
-
-        return getTask(id);
+        return taskRepository.saveTask(task);
     }
 }
