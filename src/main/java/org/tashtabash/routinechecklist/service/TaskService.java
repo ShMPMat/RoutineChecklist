@@ -17,7 +17,13 @@ public class TaskService {
     }
 
     public Task getTask(long id) {
-        return taskRepository.getTask(id);
+        Task task = taskRepository.getTask(id);
+
+        if (task == null) {
+            throw new NoTaskFoundException(id);
+        }
+
+        return task;
     }
 
     public Task saveTask(String name) {
