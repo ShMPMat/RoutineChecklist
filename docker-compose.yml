@@ -10,7 +10,7 @@ services:
     depends_on:
       - rc-pg
   rc-pg:
-    image: postgres
+    image: postgres:15
     volumes:
       - .docker-files/postgres/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     environment:
