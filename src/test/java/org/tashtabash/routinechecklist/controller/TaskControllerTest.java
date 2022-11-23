@@ -66,7 +66,7 @@ class TaskControllerTest {
                 .thenReturn(new Task(1, taskName));
 
         mockMvc.perform(post("/task/").content(taskName))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json("{\"id\": 1, \"name\": \"Task Name\"}"));
     }

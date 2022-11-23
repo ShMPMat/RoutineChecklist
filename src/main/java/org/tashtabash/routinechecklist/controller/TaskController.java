@@ -2,6 +2,7 @@ package org.tashtabash.routinechecklist.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.tashtabash.routinechecklist.entity.Task;
@@ -29,6 +30,7 @@ public class TaskController {
     public ResponseEntity<Task> saveTask(@RequestBody String name) {
         Task newTask = taskService.saveTask(name);
 
-        return ResponseEntity.ok(newTask);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(newTask);
     }
 }
