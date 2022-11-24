@@ -28,6 +28,11 @@ public class TaskController {
 
     @PostMapping(value="/")
     public ResponseEntity<Task> saveTask(@RequestBody String name) {
+        if (name.strip().equals("")) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         Task newTask = taskService.saveTask(name);
 
         return ResponseEntity.status(HttpStatus.CREATED)

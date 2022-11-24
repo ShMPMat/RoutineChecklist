@@ -3,6 +3,8 @@ package org.tashtabash.routinechecklist.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -69,5 +71,15 @@ class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json("{\"id\": 1, \"name\": \"Task Name\"}"));
+    }
+
+    @ParameterizedTest()
+    @ValueSource(strings = { "", "    ", "\t", "\u205F" })
+    void saveTaskThrows400WhenWhitespaceName(String emptyName) throws Exception {
+        mockMvc.perform(
+                post("/task/").content(emptyName)
+                        .contentType("text/plain")
+                        .characterEncoding("UTF-8")
+                ).andExpect(status().isBadRequest());
     }
 }
