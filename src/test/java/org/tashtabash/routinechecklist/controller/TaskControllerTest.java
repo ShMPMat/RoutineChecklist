@@ -80,7 +80,7 @@ class TaskControllerTest {
                 post("/task/").content(emptyName)
                         .contentType("text/plain")
                         .characterEncoding("UTF-8")
-                ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
