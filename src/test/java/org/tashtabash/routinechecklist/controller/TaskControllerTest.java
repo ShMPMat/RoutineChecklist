@@ -16,9 +16,9 @@ import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.service.NoTaskFoundException;
 import org.tashtabash.routinechecklist.service.TaskService;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -81,5 +81,21 @@ class TaskControllerTest {
                         .contentType("text/plain")
                         .characterEncoding("UTF-8")
                 ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteTask() throws Exception {
+        mockMvc.perform(delete("/task/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[] {}));
+    }
+
+    @Test
+    void deleteTaskAnswers400OnAbsentId() throws Exception {
+        doThrow(new NoTaskFoundException(1))
+                .when(taskService).deleteTask(1);
+
+        mockMvc.perform(delete("/task/1"))
+                .andExpect(status().isNotFound());
     }
 }

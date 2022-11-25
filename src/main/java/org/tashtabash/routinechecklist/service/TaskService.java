@@ -31,4 +31,12 @@ public class TaskService {
 
         return taskRepository.saveTask(task);
     }
+
+    public void deleteTask(long id) {
+        boolean success = taskRepository.delete(id);
+
+        if (!success) {
+            throw new NoTaskFoundException(id);
+        }
+    }
 }

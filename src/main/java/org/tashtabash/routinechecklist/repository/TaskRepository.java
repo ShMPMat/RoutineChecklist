@@ -38,10 +38,20 @@ public class TaskRepository {
 //            session.update(task);
 //        }
 //    }
-//
-//    public void delete(Task task) {
-//        try (Session session = sessionFactory.openSession()) {
-//            session.delete(task);
-//        }
-//    }
+
+    public boolean delete(long id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            Task task = getTask(id);
+
+            if (task != null) {
+                session.delete(task);
+            }
+
+            session.getTransaction().commit();
+
+            return task != null;
+        }
+    }
 }

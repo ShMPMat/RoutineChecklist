@@ -75,4 +75,29 @@ class TaskRepositoryTest {
         assertEquals(tasks.get(0).getName(), task.getName());
         assertNotEquals(0, tasks.get(0).getId());
     }
+
+    @Test
+    void deleteTask() {
+        session.beginTransaction();
+        Task task = new Task("Test name");
+        long id = (long) session.save(task);
+        task.setId(id);
+        session.getTransaction().commit();
+
+        taskRepository.delete(id);
+
+        List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
+                .list();
+
+        assertEquals(0, tasks.size());
+    }
+
+    @Test
+    void deleteTaskReturnsFalseOnNoTask() {
+        long id = 1;
+
+        boolean success = taskRepository.delete(id);
+
+        assertFalse(success);
+    }
 }

@@ -11,7 +11,7 @@ import org.tashtabash.routinechecklist.repository.TaskRepository;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +58,28 @@ class TaskServiceUnitTest {
         assertEquals(
                 expectedTask,
                 task
+        );
+    }
+
+    @Test
+    void deleteTask() {
+        long id = random.nextInt();
+        when(taskRepository.delete(id))
+                .thenReturn(true);
+
+        taskService.deleteTask(id);
+
+        verify(taskRepository, only()).delete(id);
+    }
+
+    @Test
+    void deleteTaskThrowsOnAbsentId() {
+        when(taskRepository.delete(anyLong()))
+                .thenReturn(false);
+
+        assertThrows(
+                NoTaskFoundException.class,
+                () -> taskService.deleteTask(1)
         );
     }
 }
