@@ -1,5 +1,6 @@
 package org.tashtabash.routinechecklist.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,8 @@ class TaskControllerTest {
     @InjectMocks
     TaskController taskController;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     MockMvc mockMvc;
 
     @BeforeEach
@@ -43,13 +46,14 @@ class TaskControllerTest {
 
     @Test
     void getTask() throws Exception {
+        var task = new Task(1, "Test Task");
         when(taskService.getTask(1))
-                .thenReturn(new Task(1, "Test Task"));
+                .thenReturn(task);
 
         mockMvc.perform(get("/task/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(content().json("{\"id\": 1, \"name\": \"Test Task\"}"));
+                .andExpect(content().json(objectMapper.writeValueAsString(task)));
     }
 
     @Test
@@ -64,13 +68,14 @@ class TaskControllerTest {
     @Test
     void saveTask() throws Exception {
         var taskName = "Task Name";
+        var resultTask = new Task(1, taskName);
         when(taskService.saveTask(taskName))
-                .thenReturn(new Task(1, taskName));
+                .thenReturn(resultTask);
 
         mockMvc.perform(post("/task/").content(taskName))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(content().json("{\"id\": 1, \"name\": \"Task Name\"}"));
+                .andExpect(content().json(objectMapper.writeValueAsString(resultTask)));
     }
 
     @ParameterizedTest()
