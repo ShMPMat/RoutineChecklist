@@ -10,7 +10,7 @@ import org.tashtabash.routinechecklist.service.TaskService;
 
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/tasks")
 public class TaskController {
     private final TaskService taskService;
 
@@ -26,7 +26,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @PostMapping(value="/")
+    @PostMapping(value="")
     public ResponseEntity<Task> saveTask(@RequestBody String name) {
         if (name.strip().equals("")) {
             return ResponseEntity.badRequest()

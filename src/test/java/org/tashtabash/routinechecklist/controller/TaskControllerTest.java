@@ -50,7 +50,7 @@ class TaskControllerTest {
         when(taskService.getTask(1))
                 .thenReturn(task);
 
-        mockMvc.perform(get("/task/1"))
+        mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json(objectMapper.writeValueAsString(task)));
@@ -61,7 +61,7 @@ class TaskControllerTest {
         when(taskService.getTask(1))
                 .thenThrow(new NoTaskFoundException(1));
 
-        mockMvc.perform(get("/task/1"))
+        mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isNotFound());
     }
 
@@ -72,7 +72,7 @@ class TaskControllerTest {
         when(taskService.saveTask(taskName))
                 .thenReturn(resultTask);
 
-        mockMvc.perform(post("/task/").content(taskName))
+        mockMvc.perform(post("/tasks").content(taskName))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json(objectMapper.writeValueAsString(resultTask)));
@@ -82,7 +82,7 @@ class TaskControllerTest {
     @ValueSource(strings = { "", "    ", "\t", "\u205F" })
     void saveTaskThrows400WhenWhitespaceName(String emptyName) throws Exception {
         mockMvc.perform(
-                post("/task/").content(emptyName)
+                post("/tasks").content(emptyName)
                         .contentType("text/plain")
                         .characterEncoding("UTF-8")
         ).andExpect(status().isBadRequest());
@@ -90,7 +90,7 @@ class TaskControllerTest {
 
     @Test
     void deleteTask() throws Exception {
-        mockMvc.perform(delete("/task/1"))
+        mockMvc.perform(delete("/tasks/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(new byte[] {}));
     }
@@ -100,7 +100,7 @@ class TaskControllerTest {
         doThrow(new NoTaskFoundException(1))
                 .when(taskService).deleteTask(1);
 
-        mockMvc.perform(delete("/task/1"))
+        mockMvc.perform(delete("/tasks/1"))
                 .andExpect(status().isNotFound());
     }
 }
