@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.repository.TaskRepository;
 
+import javax.transaction.Transactional;
+
 
 @Service
 public class TaskService {
@@ -30,6 +32,13 @@ public class TaskService {
         Task task = new Task(name);
 
         return taskRepository.saveTask(task);
+    }
+
+    @Transactional
+    public Task updateTask(Task task) {
+        getTask(task.getId());
+
+        return taskRepository.update(task);
     }
 
     public void deleteTask(long id) {

@@ -62,6 +62,32 @@ class TaskServiceUnitTest {
     }
 
     @Test
+    void updateTask() {
+        var task = new Task(random.nextInt(), "name");
+        when(taskRepository.update(task))
+                .thenReturn(task);
+        when(taskRepository.getTask(task.getId()))
+                .thenReturn(task);
+
+        var returnedTask = taskService.updateTask(task);
+
+        verify(taskRepository, times(1))
+                .update(task);
+        assertEquals(task, returnedTask);
+    }
+
+    @Test
+    void updateTaskThrowsOnAbsentId() {
+//        when(taskRepository.update(anyLong()))
+//                .thenReturn(false);
+
+        assertThrows(
+                NoTaskFoundException.class,
+                () -> taskService.updateTask(new Task(1, "Task name"))
+        );
+    }
+
+    @Test
     void deleteTask() {
         long id = random.nextInt();
         when(taskRepository.delete(id))

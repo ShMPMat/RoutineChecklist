@@ -33,11 +33,14 @@ public class TaskRepository {
         }
     }
 
-//    public void update(Task task) {
-//        try (Session session = sessionFactory.openSession()) {
-//            session.update(task);
-//        }
-//    }
+    public Task update(Task task) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(task);
+            session.getTransaction().commit();
+        }
+        return task;
+    }
 
     public boolean delete(long id) {
         try (Session session = sessionFactory.openSession()) {

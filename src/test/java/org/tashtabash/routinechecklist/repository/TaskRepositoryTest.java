@@ -77,6 +77,29 @@ class TaskRepositoryTest {
     }
 
     @Test
+    void updateTask() {
+        session.beginTransaction();
+        Task task = new Task("Test name");
+        long id = (long) session.save(task);
+        task.setId(id);
+        session.getTransaction().commit();
+
+        var newTask = new Task(id, "New name");
+
+        taskRepository.update(newTask);
+
+        session.close();
+        openSession();
+
+        List<Task> tasks = session.createQuery("SELECT t FROM Task t", Task.class)
+                .list();
+
+        assertEquals(1, tasks.size());
+        assertEquals(newTask.getName(), tasks.get(0).getName());
+        assertEquals(newTask.getId(), tasks.get(0).getId());
+    }
+
+    @Test
     void deleteTask() {
         session.beginTransaction();
         Task task = new Task("Test name");

@@ -89,6 +89,48 @@ class TaskControllerTest {
     }
 
     @Test
+    void updateTask() throws Exception {
+        var task = new Task(1, "Task name");
+        when(taskService.updateTask(task))
+                .thenReturn(task);
+
+        mockMvc.perform(
+                put("/tasks")
+                        .content(objectMapper.writeValueAsString(task))
+                        .contentType("application/json")
+                ).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(objectMapper.writeValueAsString(task)));
+    }
+
+    @Test
+    void updateTaskAnswers400OnAbsentId() throws Exception {
+        long id = 1;
+        var task = new Task(id, "Task name");
+        when(taskService.updateTask(task))
+                .thenThrow(new NoTaskFoundException(id));
+
+        mockMvc.perform(
+                put("/tasks")
+                        .content(objectMapper.writeValueAsString(task))
+                        .contentType("application/json")
+        ).andExpect(status().isNotFound());
+    }
+
+    @ParameterizedTest()
+    @ValueSource(strings = { "", "    ", "\t", "\u205F" })
+    void updateTaskThrows400WhenWhitespaceName(String emptyName) throws Exception {
+        long id = 1;
+        var task = new Task(id, emptyName);
+
+        mockMvc.perform(
+                put("/tasks")
+                        .content(objectMapper.writeValueAsString(task))
+                        .contentType("application/json")
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
     void deleteTask() throws Exception {
         mockMvc.perform(delete("/tasks/1"))
                 .andExpect(status().isOk())
