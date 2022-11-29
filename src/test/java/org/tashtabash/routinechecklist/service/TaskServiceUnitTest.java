@@ -78,9 +78,6 @@ class TaskServiceUnitTest {
 
     @Test
     void updateTaskThrowsOnAbsentId() {
-//        when(taskRepository.update(anyLong()))
-//                .thenReturn(false);
-
         assertThrows(
                 NoTaskFoundException.class,
                 () -> taskService.updateTask(new Task(1, "Task name"))
