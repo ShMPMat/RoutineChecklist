@@ -38,11 +38,11 @@ public class TaskService {
     public Task updateTask(Task task) {
         getTask(task.getId());
 
-        return taskRepository.update(task);
+        return taskRepository.updateTask(task);
     }
 
     public void deleteTask(long id) {
-        boolean success = taskRepository.delete(id);
+        boolean success = taskRepository.deleteTask(id);
 
         if (!success) {
             throw new NoTaskFoundException(id);

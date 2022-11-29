@@ -33,7 +33,7 @@ public class TaskRepository {
         }
     }
 
-    public Task update(Task task) {
+    public Task updateTask(Task task) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(task);
@@ -42,7 +42,7 @@ public class TaskRepository {
         return task;
     }
 
-    public boolean delete(long id) {
+    public boolean deleteTask(long id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 

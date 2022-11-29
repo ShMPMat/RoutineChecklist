@@ -86,7 +86,7 @@ class TaskRepositoryTest {
 
         var newTask = new Task(id, "New name");
 
-        taskRepository.update(newTask);
+        taskRepository.updateTask(newTask);
 
         session.close();
         openSession();
@@ -107,7 +107,7 @@ class TaskRepositoryTest {
         task.setId(id);
         session.getTransaction().commit();
 
-        taskRepository.delete(id);
+        taskRepository.deleteTask(id);
 
         List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
                 .list();
@@ -119,7 +119,7 @@ class TaskRepositoryTest {
     void deleteTaskReturnsFalseOnNoTask() {
         long id = 1;
 
-        boolean success = taskRepository.delete(id);
+        boolean success = taskRepository.deleteTask(id);
 
         assertFalse(success);
     }

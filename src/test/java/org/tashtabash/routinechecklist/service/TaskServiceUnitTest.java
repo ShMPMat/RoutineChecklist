@@ -64,7 +64,7 @@ class TaskServiceUnitTest {
     @Test
     void updateTask() {
         var task = new Task(random.nextInt(), "name");
-        when(taskRepository.update(task))
+        when(taskRepository.updateTask(task))
                 .thenReturn(task);
         when(taskRepository.getTask(task.getId()))
                 .thenReturn(task);
@@ -72,7 +72,7 @@ class TaskServiceUnitTest {
         var returnedTask = taskService.updateTask(task);
 
         verify(taskRepository, times(1))
-                .update(task);
+                .updateTask(task);
         assertEquals(task, returnedTask);
     }
 
@@ -87,17 +87,17 @@ class TaskServiceUnitTest {
     @Test
     void deleteTask() {
         long id = random.nextInt();
-        when(taskRepository.delete(id))
+        when(taskRepository.deleteTask(id))
                 .thenReturn(true);
 
         taskService.deleteTask(id);
 
-        verify(taskRepository, only()).delete(id);
+        verify(taskRepository, only()).deleteTask(id);
     }
 
     @Test
     void deleteTaskThrowsOnAbsentId() {
-        when(taskRepository.delete(anyLong()))
+        when(taskRepository.deleteTask(anyLong()))
                 .thenReturn(false);
 
         assertThrows(
