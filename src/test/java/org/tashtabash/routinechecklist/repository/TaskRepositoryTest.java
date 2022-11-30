@@ -72,7 +72,7 @@ class TaskRepositoryTest {
                 .list();
 
         assertEquals(1, tasks.size());
-        assertEquals(tasks.get(0).getName(), task.getName());
+        assertEquals(task.getName(), tasks.get(0).getName());
         assertNotEquals(0, tasks.get(0).getId());
     }
 
