@@ -25,6 +25,20 @@ class TaskServiceUnitTest {
     private final Random random = new Random();
 
     @Test
+    void saveTask() {
+        Task expectedTask = new Task(random.nextInt(), "Test name");
+        when(taskRepository.saveTask(new Task(expectedTask.getName())))
+                .thenReturn(expectedTask);
+
+        Task task = taskService.saveTask(expectedTask.getName());
+
+        assertEquals(
+                expectedTask,
+                task
+        );
+    }
+
+    @Test
     void getTask() {
         long id = random.nextInt();
         Task expectedTask = new Task(id, "Test name");
@@ -44,20 +58,6 @@ class TaskServiceUnitTest {
         assertThrows(
                 NoTaskFoundException.class,
                 () -> taskService.getTask(1)
-        );
-    }
-
-    @Test
-    void saveTask() {
-        Task expectedTask = new Task(random.nextInt(), "Test name");
-        when(taskRepository.saveTask(new Task(expectedTask.getName())))
-                .thenReturn(expectedTask);
-
-        Task task = taskService.saveTask(expectedTask.getName());
-
-        assertEquals(
-                expectedTask,
-                task
         );
     }
 

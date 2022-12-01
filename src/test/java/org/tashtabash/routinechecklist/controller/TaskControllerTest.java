@@ -45,27 +45,6 @@ class TaskControllerTest {
     }
 
     @Test
-    void getTask() throws Exception {
-        var task = new Task(1, "Test Task");
-        when(taskService.getTask(1))
-                .thenReturn(task);
-
-        mockMvc.perform(get("/tasks/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().json(objectMapper.writeValueAsString(task)));
-    }
-
-    @Test
-    void getTaskAnswers404OnNoTask() throws Exception {
-        when(taskService.getTask(1))
-                .thenThrow(new NoTaskFoundException(1));
-
-        mockMvc.perform(get("/tasks/1"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void saveTask() throws Exception {
         var taskName = "Task Name";
         var resultTask = new Task(1, taskName);
@@ -86,6 +65,27 @@ class TaskControllerTest {
                         .contentType("text/plain")
                         .characterEncoding("UTF-8")
         ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getTask() throws Exception {
+        var task = new Task(1, "Test Task");
+        when(taskService.getTask(1))
+                .thenReturn(task);
+
+        mockMvc.perform(get("/tasks/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(objectMapper.writeValueAsString(task)));
+    }
+
+    @Test
+    void getTaskAnswers404OnNoTask() throws Exception {
+        when(taskService.getTask(1))
+                .thenThrow(new NoTaskFoundException(1));
+
+        mockMvc.perform(get("/tasks/1"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

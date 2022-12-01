@@ -18,6 +18,12 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
+    public Task saveTask(String name) {
+        Task task = new Task(name);
+
+        return taskRepository.saveTask(task);
+    }
+
     public Task getTask(long id) {
         Task task = taskRepository.getTask(id);
 
@@ -26,12 +32,6 @@ public class TaskService {
         }
 
         return task;
-    }
-
-    public Task saveTask(String name) {
-        Task task = new Task(name);
-
-        return taskRepository.saveTask(task);
     }
 
     @Transactional

@@ -16,6 +16,13 @@ public class TaskRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    public Task saveTask(Task task) {
+        try (Session session = sessionFactory.openSession()) {
+            session.save(task);
+
+            return task;
+        }
+    }
 
     public Task getTask(long id) {
         try (Session session = sessionFactory.openSession()) {
@@ -24,14 +31,6 @@ public class TaskRepository {
     }
 
     //TODO search
-
-    public Task saveTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(task);
-
-            return task;
-        }
-    }
 
     public Task updateTask(Task task) {
         try (Session session = sessionFactory.openSession()) {

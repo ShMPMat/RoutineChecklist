@@ -19,13 +19,6 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable long id) {
-        Task task = taskService.getTask(id);
-
-        return ResponseEntity.ok(task);
-    }
-
     @PostMapping(value="")
     public ResponseEntity<Task> saveTask(@RequestBody String name) {
         if (name.strip().equals("")) {
@@ -37,6 +30,13 @@ public class TaskController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(newTask);
+    }
+
+    @GetMapping(value="/{id}")
+    public ResponseEntity<Task> getTask(@PathVariable long id) {
+        Task task = taskService.getTask(id);
+
+        return ResponseEntity.ok(task);
     }
 
     @PutMapping("")

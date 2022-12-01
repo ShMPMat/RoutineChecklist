@@ -44,6 +44,19 @@ class TaskRepositoryTest {
     }
 
     @Test
+    void saveTask() {
+        Task task = new Task("Test name");
+        taskRepository.saveTask(task);
+
+        List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
+                .list();
+
+        assertEquals(1, tasks.size());
+        assertEquals(task.getName(), tasks.get(0).getName());
+        assertNotEquals(0, tasks.get(0).getId());
+    }
+
+    @Test
     void getTask() {
         session.beginTransaction();
         Task task = new Task("Test name");
@@ -61,19 +74,6 @@ class TaskRepositoryTest {
         Task foundTask = taskRepository.getTask(1);
 
         assertNull(foundTask);
-    }
-
-    @Test
-    void saveTask() {
-        Task task = new Task("Test name");
-        taskRepository.saveTask(task);
-
-        List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
-                .list();
-
-        assertEquals(1, tasks.size());
-        assertEquals(task.getName(), tasks.get(0).getName());
-        assertNotEquals(0, tasks.get(0).getId());
     }
 
     @Test
