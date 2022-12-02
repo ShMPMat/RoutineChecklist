@@ -30,17 +30,22 @@ class TaskRepositoryTest {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private Session session;
+    private Session prepareDataSession;
+
+    private Session assertQuerySession;
 
     @BeforeEach
     void openSession() {
-        session = sessionFactory.openSession();
+        prepareDataSession = sessionFactory.openSession();
+        assertQuerySession = sessionFactory.openSession();
     }
 
     @AfterEach
     void closeSession() {
-        session.close();
-        session = null;
+        prepareDataSession.close();
+        assertQuerySession.close();
+        prepareDataSession = null;
+        assertQuerySession = null;
     }
 
     @Test
@@ -48,7 +53,7 @@ class TaskRepositoryTest {
         Task task = new Task("Test name");
         taskRepository.saveTask(task);
 
-        List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
+        List<Task> tasks = assertQuerySession.createQuery("SELECT t from Task t", Task.class)
                 .list();
 
         assertEquals(1, tasks.size());
@@ -58,11 +63,11 @@ class TaskRepositoryTest {
 
     @Test
     void getTask() {
-        session.beginTransaction();
+        prepareDataSession.beginTransaction();
         Task task = new Task("Test name");
-        long id = (long) session.save(task);
+        long id = (long) prepareDataSession.save(task);
         task.setId(id);
-        session.getTransaction().commit();
+        prepareDataSession.getTransaction().commit();
 
         Task foundTask = taskRepository.getTask(id);
 
@@ -78,20 +83,17 @@ class TaskRepositoryTest {
 
     @Test
     void updateTask() {
-        session.beginTransaction();
+        prepareDataSession.beginTransaction();
         Task task = new Task("Test name");
-        long id = (long) session.save(task);
+        long id = (long) prepareDataSession.save(task);
         task.setId(id);
-        session.getTransaction().commit();
+        prepareDataSession.getTransaction().commit();
 
         var newTask = new Task(id, "New name");
 
         taskRepository.updateTask(newTask);
 
-        session.close();
-        openSession();
-
-        List<Task> tasks = session.createQuery("SELECT t FROM Task t", Task.class)
+        List<Task> tasks = assertQuerySession.createQuery("SELECT t FROM Task t", Task.class)
                 .list();
 
         assertEquals(1, tasks.size());
@@ -101,15 +103,15 @@ class TaskRepositoryTest {
 
     @Test
     void deleteTask() {
-        session.beginTransaction();
+        prepareDataSession.beginTransaction();
         Task task = new Task("Test name");
-        long id = (long) session.save(task);
+        long id = (long) prepareDataSession.save(task);
         task.setId(id);
-        session.getTransaction().commit();
+        prepareDataSession.getTransaction().commit();
 
         taskRepository.deleteTask(id);
 
-        List<Task> tasks = session.createQuery("SELECT t from Task t", Task.class)
+        List<Task> tasks = assertQuerySession.createQuery("SELECT t from Task t", Task.class)
                 .list();
 
         assertEquals(0, tasks.size());
