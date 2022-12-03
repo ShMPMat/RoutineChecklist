@@ -1,23 +1,20 @@
 package org.tashtabash.routinechecklist.repository;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Repository;
 import org.tashtabash.routinechecklist.entity.Task;
 
 
 @Repository
 public class TaskRepository {
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public TaskRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    @Lookup
+    protected Session getSession() {
+        throw new UnsupportedOperationException("getSession() wasn't overridden in the implementation");
     }
 
     public Task saveTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = getSession()) {
             session.save(task);
 
             return task;
@@ -25,7 +22,7 @@ public class TaskRepository {
     }
 
     public Task getTask(long id) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = getSession()) {
             return session.get(Task.class, id);
         }
     }
@@ -33,7 +30,7 @@ public class TaskRepository {
     //TODO search
 
     public Task updateTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = getSession()) {
             session.beginTransaction();
             session.update(task);
             session.getTransaction().commit();
@@ -42,7 +39,7 @@ public class TaskRepository {
     }
 
     public boolean deleteTask(long id) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = getSession()) {
             session.beginTransaction();
 
             Task task = getTask(id);
