@@ -17,6 +17,8 @@ import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.service.NoTaskFoundException;
 import org.tashtabash.routinechecklist.service.TaskService;
 
+import java.util.List;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -77,6 +79,29 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json(objectMapper.writeValueAsString(task)));
+    }
+
+    @Test
+    void searchTask() throws Exception {
+        List<Task> tasks = List.of(new Task("Test name"), new Task("Test name 2"));
+        when(taskService.searchTasks())
+                .thenReturn(tasks);
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(objectMapper.writeValueAsString(tasks)));
+    }
+
+    @Test
+    void searchTaskReturnsEmptyListOnNoTask() throws Exception {
+        when(taskService.searchTasks())
+                .thenReturn(List.of());
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(objectMapper.writeValueAsString(List.of())));
     }
 
     @Test

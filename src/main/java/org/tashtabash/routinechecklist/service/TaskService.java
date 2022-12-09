@@ -7,6 +7,7 @@ import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.repository.TaskRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -32,6 +33,12 @@ public class TaskService {
         }
 
         return task;
+    }
+
+    public List<Task> searchTasks() {
+        List<Task> tasks = taskRepository.searchTasks();
+
+        return tasks;
     }
 
     @Transactional

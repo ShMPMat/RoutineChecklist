@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.service.TaskService;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/tasks")
@@ -37,6 +39,13 @@ public class TaskController {
         Task task = taskService.getTask(id);
 
         return ResponseEntity.ok(task);
+    }
+
+    @GetMapping(value="")
+    public ResponseEntity<List<Task>> searchTasks() {
+        List<Task> tasks = taskService.searchTasks();
+
+        return ResponseEntity.ok(tasks);
     }
 
     @PutMapping("")

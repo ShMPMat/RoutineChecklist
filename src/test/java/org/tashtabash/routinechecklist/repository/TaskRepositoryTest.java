@@ -14,6 +14,7 @@ import org.tashtabash.routinechecklist.entity.Task;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -72,6 +73,30 @@ class TaskRepositoryTest {
         Task foundTask = taskRepository.getTask(id);
 
         assertEquals(task, foundTask);
+    }
+
+    @Test
+    void searchTask() {
+        prepareDataSession.beginTransaction();
+        List<Task> tasks = List.of(new Task("Test name"), new Task("Test name 2"));
+        for (Task task: tasks) {
+            long id = (long) prepareDataSession.save(task);
+            task.setId(id);
+        }
+        prepareDataSession.getTransaction().commit();
+
+        List<Task> foundTasks = taskRepository.searchTasks();
+
+        assertThat(foundTasks)
+                .containsExactlyInAnyOrderElementsOf(tasks);
+    }
+
+    @Test
+    void searchTaskReturnsEmptyListOnNoTask() {
+        List<Task> foundTasks = taskRepository.searchTasks();
+
+        assertThat(foundTasks)
+                .isEmpty();
     }
 
     @Test

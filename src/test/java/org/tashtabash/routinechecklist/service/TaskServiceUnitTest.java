@@ -8,8 +8,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.tashtabash.routinechecklist.entity.Task;
 import org.tashtabash.routinechecklist.repository.TaskRepository;
 
+import java.util.List;
 import java.util.Random;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -59,6 +61,29 @@ class TaskServiceUnitTest {
                 NoTaskFoundException.class,
                 () -> taskService.getTask(1)
         );
+    }
+
+    @Test
+    void searchTask() {
+        List<Task> tasks = List.of(new Task(random.nextInt(), "Name"), new Task(random.nextInt(), "Name2"));
+        when(taskRepository.searchTasks())
+                .thenReturn(tasks);
+
+        List<Task> foundTasks = taskService.searchTasks();
+
+        assertThat(foundTasks)
+                .containsExactlyInAnyOrderElementsOf(tasks);
+    }
+
+    @Test
+    void searchTaskReturnsEmptyListOnNoTask() {
+        when(taskRepository.searchTasks())
+                .thenReturn(List.of());
+
+        List<Task> foundTasks = taskService.searchTasks();
+
+        assertThat(foundTasks)
+                .isEmpty();
     }
 
     @Test

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Repository;
 import org.tashtabash.routinechecklist.entity.Task;
 
+import java.util.List;
+
 
 @Repository
 public class TaskRepository {
@@ -27,7 +29,12 @@ public class TaskRepository {
         }
     }
 
-    //TODO search
+    public List<Task> searchTasks() {
+        try (Session session = getSession()) {
+            return session.createQuery("SELECT t FROM Task t", Task.class)
+                    .list();
+        }
+    }
 
     public Task updateTask(Task task) {
         try (Session session = getSession()) {
